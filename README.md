@@ -26,8 +26,8 @@ cd $WRKDIR
 Clone this repository and change directory
 
 ```bash
-git clone 
-cd 
+git clone git@github.com:AaltoRSE/snakemake-triton-example.git
+cd snakemake-triton-example
 ```
 
 Load `mamba` tool from a module and check that it works by printing its version number
@@ -104,7 +104,13 @@ Here's a breakdown of the Snakemake command:
 
 It is often convenient to develop the workflow locally on your own laptop/desktop computer before moving onto Triton to run actual computation-intensive experiments.
 
-To run the workflow locally, first create the conda environment and activate it
+To run the workflow locally, first clone the repository
+```
+git clone git@github.com:AaltoRSE/snakemake-triton-example.git
+cd snakemake-triton-example
+```
+
+Create the conda environment and activate it
 
 ```
 mamba env create --file snakemake.yml --prefix env/
