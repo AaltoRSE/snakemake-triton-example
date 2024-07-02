@@ -16,7 +16,7 @@ rule all:
 # - produces a single variance file as output
 # - uses a conda environment to run the script
 #   - Snakemake (re)creates the environment if it doesn't exist or the .yml file has changed
-# - logs the output of the script
+# - logs output to: snakemake_slurm-<jobid>.err, snakemake_slurm-<jobid>.out, logs/compute_variance.log
 # - will only be run after all mean files have been produced by rule "compute_mean"
 rule compute_variance:
     input:
@@ -36,7 +36,7 @@ rule compute_variance:
 # - produces a single mean file as output
 # - uses a conda environment to run the script
 #   - Snakemake (re)creates the environment if it doesn't exist or the .yml file has changed
-# - logs the output of the script
+# - logs output to: snakemake_slurm-<jobid>.err, snakemake_slurm-<jobid>.out, logs/compute_mean.log
 # - processes all random number files in resources/data/ in parallel because the processes do not depend on each other
 rule compute_mean:
     input:
