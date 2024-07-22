@@ -2,7 +2,9 @@
 
 [Snakemake](https://snakemake.readthedocs.io/en/stable/) is a workflow management tool used to create reproducible and scalable data processing workflows.
 
-This repo contains a small example project which can be cloned and run on the [Aalto Triton](https://scicomp.aalto.fi/triton/) cluster. You can use it as a starting point for your own workflow.
+This repo contains a small example project which can be cloned and run on the [Aalto Triton](https://scicomp.aalto.fi/triton/) cluster. 
+
+You can use it as a starting point for your own workflow.
 
 The project
 
