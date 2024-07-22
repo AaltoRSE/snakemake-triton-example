@@ -121,5 +121,5 @@ Then, run Snakemake with
 snakemake --snakefile workflow/Snakefile --software-deployment-method conda --conda-frontend mamba --cores 1
 ```
 
-Since we now omitted the `--profile` option, all the computation will be run locally.
+Since we now omitted the `--profile` option which defined the Slurm resource configuration, all the computation will be run locally instead.
 
