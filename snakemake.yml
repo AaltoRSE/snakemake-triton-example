@@ -1,7 +1,6 @@
 # You can use this conda environment to run Snakemake on Aalto Triton with Slurm or on your local machine without Slurm.
 name: snakemake_slurm
 channels:
-  - bioconda
   - conda-forge
 dependencies:
   - python=3.12
