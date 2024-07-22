@@ -2,16 +2,16 @@
 
 [Snakemake](https://snakemake.readthedocs.io/en/stable/) is a workflow management tool used to create reproducible and scalable data processing workflows.
 
-This repo contains a small example project which can be cloned and run on the [Aalto Triton](https://scicomp.aalto.fi/triton/) cluster.
+This repo contains a small example project which can be cloned and run on the [Aalto Triton](https://scicomp.aalto.fi/triton/) cluster. You can use it as a starting point for your own workflow.
 
 The project
 
 1. follows the [recommended Snakemake project structure](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html),
 2. uses conda environments for [integrated package management](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html),
 3. uses the [Slurm executor plugin](https://snakemake.github.io/snakemake-plugin-catalog/plugins/executor/slurm.html) to submit the workflow steps as cluster jobs,
-4. uses a [Snakefile](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html) for workflow logic and a [profile file](https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles) for Slurm resource management, decoupling the two configurations.
+4. decouples the workflow and Slurm resource configurations using a [Snakefile](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html) and a [profile configuration file](https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles), respectively.
 
-You can use it as a starting point for your own workflow. 
+
 
 ## Setup and Run Snakemake on Aalto Triton
 
@@ -26,7 +26,7 @@ cd $WRKDIR
 Clone this repository and change directory
 
 ```bash
-git clone git@github.com:AaltoRSE/snakemake-triton-example.git
+git clone https://github.com/AaltoRSE/snakemake-triton-example.git
 cd snakemake-triton-example
 ```
 
@@ -37,7 +37,7 @@ module load mamba
 mamba --version
 ```
 
-Create a conda environment containing Snakemake and the Slurm executor plugin
+Use `mamba` to create a conda environment containing Snakemake and the Slurm executor plugin
 
 ```bash
 mamba env create --file snakemake.yml --prefix env/
@@ -65,7 +65,7 @@ source activate env/
 snakemake --snakefile workflow/Snakefile --profile profiles/slurm/ --software-deployment-method conda --conda-frontend mamba --cores 2
 ```
 
-Here's a breakdown of the Snakemake command:
+Here's a breakdown of the Snakemake command (the final line):
 
 1. `--snakefile workflow/Snakefile`
 
