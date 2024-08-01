@@ -97,6 +97,8 @@ Here's a breakdown of the Snakemake command (the final line):
 
     Tell Snakemake to use two CPUs to run itself.
 
+The intermediate and final result files will be written to the project root folder under `results/`.
+
 
 ## Develop Snakemake workflow locally
 
