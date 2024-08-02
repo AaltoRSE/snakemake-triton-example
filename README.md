@@ -125,7 +125,7 @@ The intermediate and final result files will be written to the project root fold
 
 ## How to adapt the project for your own workflow
 
-In order to adapt the project to your own workflow, you must do the following:
+In order to adapt the project to your own workflow, do the following:
 
 1. Replace the workflow in `workflow/Snakefile` with your own.
 2. Add required computational resources for the Snakefile jobs (rules) to the profile file in `profiles/slurm/config.yaml`.
