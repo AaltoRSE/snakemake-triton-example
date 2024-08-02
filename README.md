@@ -15,14 +15,18 @@ The project
 
 The workflow is run on Triton using Slurm in the following manner:
 
-1. The user submits a Slurm batch job which starts Snakemake on the Triton login node.
-2. Snakemake starts running on a Triton computational node.
-3. Snakemake submits necessary Slurm batch jobs based on the Snakefile rules.
-4. Slurm executes these "Snakefile rule jobs" on Triton computational nodes.
-5. The "Snakefile rule jobs" complete.
-6. Snakemake finishes.
-7. The original Slurm batch job in step 1. completes.
+```mermaid
+flowchart TD
+    A[User submits a Slurm batch job on the Triton login node.]
+    B[The batch job starts Snakemake on a Triton computational node.]
+    C[Snakemake submits necessary Slurm batch jobs based on the Snakefile rules.]
+    D[The batch jobs execute the Snakefile rules on Triton computational nodes.]
+    E[The batch jobs complete.]
+    F[Snakemake finishes.]
+    G[The Slurm batch job running Snakemake completes.]
 
+    A --> B --> C --> D --> E --> F --> G
+```
 
 ## Setup and Run Snakemake on Aalto Triton
 
