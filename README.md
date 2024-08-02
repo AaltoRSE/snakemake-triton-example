@@ -4,7 +4,7 @@
 
 This repo contains a small example project which can be cloned and run on the [Aalto Triton](https://scicomp.aalto.fi/triton/) cluster. 
 
-You can use it as a [starting point for your own workflow](#how-to-start-working-on-your-workflow).
+You can use it as a [starting point for your own workflow](#how-to-adapt-the-project-for-your-own-workflow).
 
 The project
 
@@ -15,16 +15,20 @@ The project
 
 The workflow is run on Triton using Slurm in the following manner:
 
-1. The user submits a Slurm job which starts Snakemake on the Triton login node.
-2. Snakemake starts running on a computational node.
-3. Snakemake submits the necessary Slurm jobs based on the Snakefile.
-4. Slurm executes these jobs on computational nodes.
-5. The jobs complete.
-6. Snakemake finishes the workflow. 
-7. The original Slurm job in step 1. completes.
+1. The user submits a Slurm batch job which starts Snakemake on the Triton login node.
+2. Snakemake starts running on a Triton computational node.
+3. Snakemake submits necessary Slurm batch jobs based on the Snakefile rules.
+4. Slurm executes these "Snakefile rule jobs" on Triton computational nodes.
+5. The "Snakefile rule jobs" complete.
+6. Snakemake finishes.
+7. The original Slurm batch job in step 1. completes.
 
 
 ## Setup and Run Snakemake on Aalto Triton
+
+Instructions to setup and run Snakemake on Aalto Triton.
+
+### Setup
 
 First, [connect to Triton using SSH](https://scicomp.aalto.fi/triton/tut/connecting/#connecting-via-ssh).
 
@@ -54,20 +58,26 @@ Use `mamba` to create a conda environment containing Snakemake and the Slurm exe
 mamba env create --file snakemake.yml --prefix env/
 ```
 
+### Run
+
 Submit the Slurm job which starts Snakemake with
 
 ```bash
 sbatch snakemake_slurm.sh
 ```
 
-The sbatch script `snakemake_slurm.sh` requests resources to run Snakemake itself:
+The batch script `snakemake_slurm.sh` requests resources to run Snakemake itself. 
+
+We start Snakemake via a batch script so that it runs non-interactively and we are free to close our connection to Triton while we are waiting for the actual workflow computations to finish.  
+
+The contents of the batch script:
 
 ```
 #!/bin/bash
 #SBATCH --job-name=snakemake_slurm
 #SBATCH --time=01:00:00            # Runtime needs to be longer than the time it takes to complete the workflow. Modify accordingly!
 #SBATCH --cpus-per-task=2          # Generally enough CPUs to run Snakemake. No need to modify.
-#SBATCH --mem=2G                   # Generally enough RAM to run Snakemake. No need to modify.
+#SBATCH --mem=2G                   # Generally enough RAM to run Snakemake. Modify if Snakemake process runs out of memory.
 #SBATCH --output=snakemake_slurm-%j.out
 #SBATCH --error=snakemake_slurm-%j.err
 
@@ -108,16 +118,17 @@ Here's a breakdown of the Snakemake command (the final line):
 
 The intermediate and final result files will be written to the project root folder under `results/`.
 
-## How to start working on your workflow
 
-In order to adapt the project to your own workflow, start by
+## How to adapt the project for your own workflow
+
+In order to adapt the project to your own workflow, you must do the following:
 
 1. Replace the workflow in `workflow/Snakefile` with your own.
-2. Add required computational resources to the profile file in `profiles/slurm/config.yaml`.
+2. Add required computational resources for the Snakefile jobs (rules) to the profile file in `profiles/slurm/config.yaml`.
 3. Increase the runtime value in the batch script `snakemake_slurm.sh` so that it is longer than the time it takes to complete the workflow. (Start e.g. with 12 hours and increase if necessary.)
 
 
-## Develop Snakemake workflow locally
+## Setup and Run Snakemake locally
 
 Finally, it is often convenient to develop the workflow locally on your own laptop/desktop computer before moving onto Triton to run actual computation-intensive experiments.
 
