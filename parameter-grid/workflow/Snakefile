@@ -1,0 +1,59 @@
+<<<<<<< HEAD
+# This Snakefile is a simple example of a workflow that extracts and saves submatrices from a given matrix.
+# The 5x5 input matrix is stored in the resources/data/ directory.
+# The workflow consists of a single rule:
+# - compute: extracts a submatrix from the input matrix based on the width and height parameters
+# The rule is run in parallel for all (width, height) pairs.
+=======
+# This Snakefile is an example of a workflow that extracts and saves submatrices from a given matrix.
+# The 5x5 input matrix is stored in the resources/data/ directory.
+# The workflow consists of a single rule:
+# - compute: extracts a submatrix from the input matrix based on the width and height parameters
+# The rule is run in parallel for all parameter (width, height) pairs in the parameter grid.
+>>>>>>> multiple-folders
+
+from snakemake.utils import min_version
+min_version("8.18.0")
+
+<<<<<<< HEAD
+=======
+# Define the parameter grid
+>>>>>>> multiple-folders
+PARAMS = {
+    "width": [1, 2, 3,],
+    "height": [2, 3, 4, 5],
+}
+
+<<<<<<< HEAD
+=======
+# The "all" rule lists all files that should ultimately be produced by the workflow
+>>>>>>> multiple-folders
+rule all:
+    input: 
+        expand("results/submatrix___width={width}___height={height}.txt", **PARAMS)
+
+<<<<<<< HEAD
+=======
+# Rule to extract submatrix
+# This rule
+# - takes a single matrix file as input
+# - produces a single submatrix file as output
+# - uses a conda environment to run the script
+#   - Snakemake (re)creates the environment if it doesn't exist or the .yml file has changed
+# - logs output to: snakemake_slurm-<jobid>.err, snakemake_slurm-<jobid>.out, logs/extract_submatrix__width={width}___height={height}.log
+# - processes all (width, height) value pairs in parallel because the processes do not depend on each other
+>>>>>>> multiple-folders
+rule:
+    name: "extract_submatrix"
+    input:
+        filename = "resources/data/matrix.txt",
+        script = "workflow/scripts/extract_submatrix.py"
+    output:
+        filename = "results/submatrix___width={width}___height={height}.txt"
+    conda:
+        "envs/extract_submatrix.yml"
+    log: 
+        "logs/extract_submatrix___width={width}___height={height}.log"
+    shell:
+        "python {input.script} {input.filename} {output.filename} {wildcards.width} {wildcards.height}"
+

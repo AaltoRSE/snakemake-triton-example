@@ -1,0 +1,31 @@
+# Tell snakemake to use Slurm
+executor: slurm
+
+# Maximum number of parallel jobs
+jobs: 10  
+
+# Default resources for all rules (overwritten by set-threads and set-resources)
+default-resources:
+  slurm_partition: batch
+  
+# Set number of threads for rule(s) ("threads" is equal to Slurm's "cpus-per-task")
+set-threads: 
+  compute_mean: 1
+  compute_variance: 2
+
+# Set other resources (memory, runtime, GPU) for specific rule(s)
+# Value formats are described in: 
+# https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#standard-resources
+set-resources:
+  compute_mean:
+    mem: 500MB
+    runtime: 30m
+    # To request a GPU, you can use the following two lines
+    # partition: gpu
+    # slurm_extra: "'--gres=gpu:1'"
+  compute_variance:
+    mem: 1GB
+    runtime: 1h
+    # To request a GPU, you can use the following two lines
+    # partition: gpu
+    # slurm_extra: "'--gres=gpu:1'"

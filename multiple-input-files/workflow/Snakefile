@@ -1,0 +1,60 @@
+# This Snakefile is an example of a workflow that computes the variance of the means of sets of numbers.
+# The sets of numbers are stored in files in the resources/data/ directory.
+# The workflow consists of two rules:
+# - compute_mean: computes the mean of a set of numbers
+# - compute_variance: computes the variance of the means
+# The compute_mean rule is run in parallel for all sets of numbers.
+# The compute_variance rule is run after all compute_mean rules have been run.
+
+from snakemake.utils import min_version
+min_version("8.14.0")
+
+# Data files
+# The "IDS" variable is a list of all IDs found in the input directory
+IDS, = glob_wildcards("resources/data/numbers_{id}.txt")
+
+# The "all" rule lists all files that should ultimately be produced by the workflow
+rule all:
+    input:
+        expand("results/variance_of_means.txt")
+
+# Rule to compute variance of the means
+# This rule
+# - takes all mean files as input
+# - produces a single variance file as output
+# - uses a conda environment to run the script
+#   - Snakemake (re)creates the environment if it doesn't exist or the .yml file has changed
+# - logs output to: snakemake_slurm-<jobid>.err, snakemake_slurm-<jobid>.out, logs/compute_variance.log
+# - will only be run after all mean files have been produced by rule "compute_mean"
+rule compute_variance:
+    input:
+        expand("results/mean_{id}.txt", id=IDS)
+    output:
+        "results/variance_of_means.txt"
+    conda:
+        "envs/compute_variance.yml"
+    log: 
+        "logs/compute_variance.log"
+    shell:
+        "python workflow/scripts/compute_variance.py {input} {output} 1> {log} 2> {log}"
+
+# Rule to compute mean of the numbers
+# This rule
+# - takes a single number file as input
+# - produces a single mean file as output
+# - uses a conda environment to run the script
+#   - Snakemake (re)creates the environment if it doesn't exist or the .yml file has changed
+# - logs output to: snakemake_slurm-<jobid>.err, snakemake_slurm-<jobid>.out, logs/compute_mean_<id>.log
+# - processes all number files in resources/data/ in parallel because the processes do not depend on each other
+rule compute_mean:
+    input:
+        "resources/data/numbers_{id}.txt"
+    output:
+        "results/mean_{id}.txt"
+    conda:
+        "envs/compute_mean.yml"
+    log: 
+        "logs/compute_mean_{id}.log"
+    shell:
+        "python workflow/scripts/compute_mean.py {input} {output} 1> {log} 2> {log}"
+
